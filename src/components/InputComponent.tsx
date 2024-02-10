@@ -1,22 +1,32 @@
 import React from 'react'
-import { StyleSheet, TextInput } from 'react-native'
-import { INPUT_COLOR } from '../commons/constantsColor'
+import { StyleSheet, Text, TextInput, View } from 'react-native'
+import { ERROR_COLOR, INPUT_COLOR } from '../commons/constantsColor'
 
 interface InputProps{
     placeholder: string;
     name: string;
     onChangeText: (name: string, value: string)=>void;
     isPassword?: boolean;
+    hasError:boolean;
 }
 
-export const InputComponent = ({placeholder, name, onChangeText, isPassword=false}:InputProps) => {
+export const InputComponent = ({placeholder, name, onChangeText, isPassword=false, hasError}:InputProps) => {
   return (
-    <TextInput
-        placeholder={placeholder}
-        keyboardType='default'
-        style={styles.inputText}
-        onChangeText={(value: string)=>onChangeText(name, value)}
-        secureTextEntry={isPassword}/>
+    <View>
+        <TextInput
+            placeholder={placeholder}
+            keyboardType='default'
+            style={(hasError)
+                    ?{...styles.inputText, ...styles.error}
+                    :{...styles.inputText}}
+            onChangeText={(value: string)=>onChangeText(name, value)}
+            secureTextEntry={isPassword}/>
+        {
+            (hasError)
+            ?<Text style={styles.errorText}>El campo es oblogatorio</Text>
+            :null
+        }
+    </View>
   )
 }
 
@@ -26,5 +36,15 @@ const styles=StyleSheet.create({
         paddingHorizontal:20,
         borderRadius:10, 
         marginVertical:7
+    }, 
+    error:{
+        borderColor:ERROR_COLOR,
+        borderStyle:'solid',
+        borderWidth:1
+    },
+    errorText:{
+        color:ERROR_COLOR,
+        fontSize:14,
+        fontWeight:'bold'
     }
 })
