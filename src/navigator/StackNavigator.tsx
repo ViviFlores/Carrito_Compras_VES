@@ -8,12 +8,13 @@ import { useState } from 'react';
 export interface User{
   id: number,
   username: string,
+  email: string,
   password: string
 }
 
 const users:User[]=[
-  {id:1, username:'vflores', password:'123456'},
-  {id:2, username:'caguas', password:'12345678'}
+  {id:1, username:'vflores', email:'vflores@gmail.com', password:'123456'},
+  {id:2, username:'caguas',email:'vflores@gmail.com', password:'12345678'}
 ]
 
 const Stack = createStackNavigator();

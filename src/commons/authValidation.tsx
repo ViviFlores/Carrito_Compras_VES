@@ -1,12 +1,18 @@
 import Snackbar from "react-native-snackbar";
 import { User } from "../navigator/StackNavigator";
-import { UserForm } from "../screens/LoginScreen";
+import { LoginForm } from "../screens/LoginScreen";
+import { RegisterForm } from "../screens/RegisterScreen";
 
-export const hasErrorForm=(form: UserForm)=>{
+
+export const hasErrorFormLogin=(form: LoginForm)=>{
     return form.username == '' || form.password == ''
 }
 
-export const verifyExistUser=(users: User[], form: UserForm)=>{
+export const hasErrorFormRegister=(form: RegisterForm)=>{
+    return form.email == '' || form.username == '' || form.password == ''
+}
+
+export const verifyExistUser=(users: User[], form: LoginForm)=>{
     return users.filter(user=>user.username == form.username)[0];
 } 
 

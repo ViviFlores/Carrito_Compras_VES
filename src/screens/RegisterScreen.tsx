@@ -6,12 +6,13 @@ import { stylesGlobal } from '../theme/appTheme'
 import { InputComponent } from '../components/InputComponent'
 import { ButtonComponent } from '../components/ButtonComponent'
 import { User } from '../navigator/StackNavigator'
-import { getIdNewUser, hasErrorForm, showSnackBar, verifyExistUser } from '../commons/authValidation'
+import { getIdNewUser, hasErrorFormRegister, showSnackBar, verifyExistUser } from '../commons/authValidation'
 import { ERROR_COLOR, PRIMARY_COLOR } from '../commons/constantsColor'
 import { useNavigation } from '@react-navigation/native'
 
-interface UserForm{
+export interface RegisterForm{
   username: string,
+  email: string,
   password: string;
   hasError: boolean;
 }
@@ -28,8 +29,9 @@ export const RegisterScreen = ({usersLogin, setUsersLogin}:RegisterProps) => {
 
   //hook useState
   //Gestionar los datos de mi formulario
-  const [form, setForm] = useState<UserForm>({
+  const [form, setForm] = useState<RegisterForm>({
     username:'',
+    email:'',
     password:'',
     hasError:false
   });
@@ -48,7 +50,7 @@ export const RegisterScreen = ({usersLogin, setUsersLogin}:RegisterProps) => {
   //Función para guardar los usuarios
   const handlerSaveUser=()=>{
     //Validar que los campos se encuentren llenos
-    if(hasErrorForm(form)){
+    if(hasErrorFormRegister(form)){
       setForm(prevState=>({
         ...prevState,
           hasError:true
@@ -78,6 +80,7 @@ export const RegisterScreen = ({usersLogin, setUsersLogin}:RegisterProps) => {
     setUsersLogin(newUser)
     showSnackBar('Usuario registrado con éxito', PRIMARY_COLOR)
     
+    console.log(form);
     //navegar al screen anterior - inicio de sesión
     navigation.goBack();
   }
@@ -89,6 +92,7 @@ export const RegisterScreen = ({usersLogin, setUsersLogin}:RegisterProps) => {
             <Text style={stylesGlobal.textPrincipal}>Estás muy cerca!</Text>
             <Text style={stylesGlobal.textDescription}>Realiza tus compras de manera rápida y segura</Text>
             <View style={stylesGlobal.containerForm}>
+              <InputComponent placeholder='Correo electrónico' name={'email'} onChangeText={handlerChangeText} hasError={form.hasError}/>
               <InputComponent placeholder='Usuario' name={'username'} onChangeText={handlerChangeText} hasError={form.hasError}/>
               <InputComponent
                 placeholder='Contraseña'

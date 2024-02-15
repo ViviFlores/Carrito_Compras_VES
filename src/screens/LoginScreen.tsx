@@ -10,9 +10,9 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { stylesGlobal } from '../theme/appTheme';
 import { User } from '../navigator/StackNavigator';
 import { CommonActions, useNavigation } from '@react-navigation/native';
-import { hasErrorForm, showSnackBar, verifyExistUser } from '../commons/authValidation';
+import { hasErrorFormLogin, showSnackBar, verifyExistUser } from '../commons/authValidation';
 
-export interface UserForm{
+export interface LoginForm{
     username: string,
     password: string;
     hasError: boolean;
@@ -30,7 +30,7 @@ export const LoginScreen = ({users}:LoginProps) => {
 
   //hook useState
   //Gestionar los datos de mi formulario
-  const [form, setForm] = useState<UserForm>({
+  const [form, setForm] = useState<LoginForm>({
     username:'',
     password:'',
     hasError:false
@@ -55,7 +55,7 @@ export const LoginScreen = ({users}:LoginProps) => {
   //Función que envia los datos del formulario
   const handlerSendInfo=()=>{
     //Validar que los campos se encuentren llenos
-    if(hasErrorForm(form)){
+    if(hasErrorFormLogin(form)){
       setForm(prevState=>({
         ...prevState,
           hasError:true
