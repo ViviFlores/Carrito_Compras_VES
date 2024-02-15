@@ -5,32 +5,28 @@ import { ERROR_COLOR, PRIMARY_COLOR } from '../commons/constantsColor'
 import { BodyComponent } from '../components/BodyComponent'
 import { InputComponent } from '../components/InputComponent';
 import { ButtonComponent } from '../components/ButtonComponent';
-import Icon from 'react-native-vector-icons/MaterialIcons'
 import Snackbar from 'react-native-snackbar';
 import { StackScreenProps } from '@react-navigation/stack';
 import { stylesGlobal } from '../theme/appTheme';
+import { User } from '../navigator/StackNavigator';
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import { hasErrorForm, showSnackBar, verifyExistUser } from '../commons/authValidation';
 
-interface UserForm{
+export interface UserForm{
     username: string,
     password: string;
     hasError: boolean;
 }
 
-//Data prueba
-interface User{
-  id: number,
-  username: string,
-  password: string
+//interface Props extends StackScreenProps<any,any>{};
+interface LoginProps{
+  users:User[]
 }
 
-const users:User[]=[
-  {id:1, username:'vflores', password:'123456'},
-  {id:2, username:'caguas', password:'12345678'}
-]
+export const LoginScreen = ({users}:LoginProps) => {
 
-interface Props extends StackScreenProps<any,any>{};
-
-export const LoginScreen = ({navigation}:Props) => {
+  //Hook de navegación
+  const navigation=useNavigation();
 
   //hook useState
   //Gestionar los datos de mi formulario
@@ -59,7 +55,7 @@ export const LoginScreen = ({navigation}:Props) => {
   //Función que envia los datos del formulario
   const handlerSendInfo=()=>{
     //Validar que los campos se encuentren llenos
-    if(form.username == '' || form.password == ''){
+    if(hasErrorForm(form)){
       setForm(prevState=>({
         ...prevState,
           hasError:true
@@ -71,24 +67,14 @@ export const LoginScreen = ({navigation}:Props) => {
       ...prevState,
         hasError:false
     }))
-    //console.log(numero);
 
-    if(!verifyUser()){
-      Snackbar.show({
-        text: 'Usuario y/o contraseña incorrecta!',
-        duration: Snackbar.LENGTH_SHORT,
-        backgroundColor:ERROR_COLOR,
-        textColor:'white'
-      });
+  //Llamar función para verificar si el usuario existe
+  const existUser= verifyExistUser(users, form)
+    if(!existUser || existUser.password != form.password){
+      showSnackBar("Usuario y/o contraseña incorrecta!", ERROR_COLOR)
       return;
     }
     console.log(form)
-  }
-
-  //Función para verificar si existe el usuario
-  const verifyUser=()=>{
-    const existUser= users.filter(user=>user.username == form.username && user.password == form.password)[0];
-    return existUser
   }
 
   return (
@@ -98,20 +84,16 @@ export const LoginScreen = ({navigation}:Props) => {
         <BodyComponent>
             <Text style={stylesGlobal.textPrincipal}>Bienvenido de nuevo!</Text>
             <Text style={stylesGlobal.textDescription}>Realiza tus compras de manera rápida y segura</Text>
-            <View style={styles.containerForm}>
+            <View style={stylesGlobal.containerForm}>
                 <InputComponent placeholder='Usuario' name='username' onChangeText={handlerChangeText} hasError={form.hasError}/>
                 <InputComponent 
                   placeholder='Contraseña' 
                   name='password' 
                   onChangeText={handlerChangeText}
                   isPassword={hiddenPassword}
+                  hasIcon={true}
+                  accionIcon={()=>setHiddenPassword(!hiddenPassword)}
                   hasError={form.hasError}/>
-                <Icon 
-                  style={styles.icon} 
-                  name='visibility' 
-                  size={20} 
-                  color={PRIMARY_COLOR}
-                  onPress={()=>setHiddenPassword(!hiddenPassword)}/>
             </View>
             {/* <TextInput
               placeholder='número'
@@ -120,28 +102,10 @@ export const LoginScreen = ({navigation}:Props) => {
             /> */}
             <ButtonComponent title='Iniciar Sesión' onPress={handlerSendInfo}/>
             <TouchableOpacity
-              onPress={()=>navigation.navigate('RegisterScreen')}>
-              <Text style={styles.textRegister}>No tienes cuenta? Regístrate ahora</Text>
+              onPress={()=>navigation.dispatch(CommonActions.navigate({name:'RegisterScreen'}))}>
+              <Text style={stylesGlobal.textNavigation}>No tienes cuenta? Regístrate ahora</Text>
             </TouchableOpacity>
         </BodyComponent>
     </View>
   )
 }
-
-const styles=StyleSheet.create({
-    containerForm:{
-        marginVertical:10
-    },
-    icon:{
-      position:'absolute',
-      right:20,
-      marginTop:85
-    },
-    textRegister:{
-      color:PRIMARY_COLOR,
-      fontSize:15,
-      marginTop:20,
-      fontWeight:'bold',
-      textAlign:'center'
-    }
-})

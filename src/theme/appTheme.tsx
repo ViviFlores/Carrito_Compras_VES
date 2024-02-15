@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { PRIMARY_COLOR } from "../commons/constantsColor";
 
 export const stylesGlobal=StyleSheet.create({
     textPrincipal:{
@@ -8,5 +9,15 @@ export const stylesGlobal=StyleSheet.create({
     },
     textDescription:{
         fontSize:15
+    },
+    containerForm:{
+        marginVertical:10
+    },
+    textNavigation:{
+        color:PRIMARY_COLOR,
+        fontSize:15,
+        marginTop:20,
+        fontWeight:'bold',
+        textAlign:'center'
     }
 })
