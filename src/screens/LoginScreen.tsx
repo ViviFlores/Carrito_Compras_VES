@@ -74,7 +74,8 @@ export const LoginScreen = ({users}:LoginProps) => {
       showSnackBar("Usuario y/o contraseña incorrecta!", ERROR_COLOR)
       return;
     }
-    console.log(form)
+    //console.log(form)
+    navigation.dispatch(CommonActions.navigate({name:'HomeScreen'}))
   }
 
   return (

@@ -3,6 +3,7 @@ import { LoginScreen } from '../screens/LoginScreen';
 import { PRIMARY_COLOR } from '../commons/constantsColor';
 import { RegisterScreen } from '../screens/RegisterScreen';
 import { useState } from 'react';
+import { HomeScreen } from '../screens/HomeScreen/HomeScreen';
 
 //Data prueba
 export interface User{
@@ -37,6 +38,7 @@ export const StackNavigator=()=> {
     }}>
       <Stack.Screen name="LoginScreen" options={{headerShown:false}} children={()=><LoginScreen users={usersLogin}/>} />
       <Stack.Screen name="RegisterScreen" options={{headerShown:false}} children={()=><RegisterScreen usersLogin={usersLogin} setUsersLogin={hadlerAddUser}/>} />
+      <Stack.Screen name="HomeScreen" options={{headerShown:false}} component={HomeScreen}/>
     </Stack.Navigator>
   );
 }
