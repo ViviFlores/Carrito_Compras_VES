@@ -6,10 +6,11 @@ import { PRIMARY_COLOR } from '../../../commons/constantsColor'
 import { ModalProduct } from './ModalProduct'
 
 interface Props{
-    product: Product
+    product: Product;
+    handlerChangeStockProduct:(idProducto: number, quantity: number)=>void;
 }
 
-export const CardProduct = ({product}:Props) => {
+export const CardProduct = ({product, handlerChangeStockProduct}:Props) => {
 
     // Hook que controla el modal 
     const [showModal, setShowModal] = useState(false);
@@ -32,7 +33,7 @@ export const CardProduct = ({product}:Props) => {
                 </View>
             </View>
         </TouchableOpacity>
-        <ModalProduct product={product} isVisible={showModal} changeVisible={()=>setShowModal(!showModal)}/>
+        <ModalProduct product={product} isVisible={showModal} changeVisible={()=>setShowModal(!showModal)} handlerChangeStockProduct={handlerChangeStockProduct}/>
     </View>
   )
 }
